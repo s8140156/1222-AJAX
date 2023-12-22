@@ -6,13 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>XMLHttpRequest</title>
     <link rel="shortcut icon" href="#" type="image/x-icon">
+    <link rel="stylesheet" href="./plugin/css/bootstrap.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1 class="header">XMLHttpRequest</h1>
-    <div class="title"></div>
-    <h4></h4>
-    <ul></ul>
+    <h4 class="title"></h4>
+    <div class="updated" ></div>
+    <ul class="list-group"></ul>
+<script src="./plugin/js/jquery.js"></script>
+<script src="./plugin/js/bootstrap.js"></script>    
 
 </body>
 </html>
@@ -26,14 +29,40 @@
     ********************************************************/
 
     //宣告一個XMLHttpRequest物件
+    let xhr=new XMLHttpRequest
 
 
     //建立請求的各項設定及實質內容
-
-
+    //async -非同步
+    //sync - 同步
+    xhr.open('GET','https://kktix.com/events.json');
+    xhr.responseType = 'json';
     //建立得到回應時的各項設定及行為
+    xhr.onload=function(){  
+        let type=xhr.getResponseHeader("Content-Type");
+        let status=xhr.status
+        //let response=xhr.responseText
+        let response=xhr.response
+        //let res=JSON.parse(response) //轉換文字為json格式的物件
+        console.log(response)
+        let events=response.entry;
+        //console.log(events);
+        events.forEach((event,idx)=>{
+            $("ul").append(`<li class='list-group-item list-group-item-action'>
+                                <div>${event.title}</div>
+                                <div>${event.summary}</div>
+                                <div>${event.content}</div>
+                            </li>"`)
+        })
+        $(".title").text(response.title)
+        $(".updated").text(response.updated)
 
+}
 
     //送出請求
+    xhr.send()
+
+    //送出請求
+    xhr.send();
 
     </script>

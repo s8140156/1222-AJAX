@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Fetch</title>
     <link rel="shortcut icon" href="#" type="image/x-icon">
+    <link rel="stylesheet" href="./plugin/css/bootstrap.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,6 +14,8 @@
     <div class="title"></div>
     <h4></h4>
     <ul></ul>
+    <script src="./plugin/js/jquery.js"></script>
+    <script src="./plugin/js/bootstrap.js"></script>  
     
 </body>
 </html>
@@ -25,7 +28,31 @@
     ********************************************************/
 
     //建立FETCH請求及實質內容
+    fetch('https://kktix.com/events.json',
+          {method:'get',
+            headers:{'Content-Type':'application/x-www-form-urlencoded'}
+          })
+        .then(function(response){
 
+            return response.json()
+                
+        })
+        .then(function(data){ 
+	
+            console.log(data)
+            let events=data.entry;
+            //console.log(events);
+            events.forEach((event,idx)=>{
+                $("ul").append(`<li class='list-group-item list-group-item-action'>
+                                    <div>${event.title}</div>
+                                <div>${event.summary}</div>
+                                <div>${event.content}</div>
+                            </li>`)})
+
+            $(".title").text(data.title)
+            $(".updated").text(data.updated)   
+    
+    })
 
     //建立回呼函式(call back function)來處理回應時的各項行為
 
