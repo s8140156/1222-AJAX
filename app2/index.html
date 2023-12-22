@@ -33,8 +33,11 @@ function create(){
 }
 
 //查詢資料的函式
-function query(){
-
+function queryAll(){
+  $.get("./api/query.php?do=all",(users)=>{
+    //users=JSON.parse(users)
+    console.log(users)
+  })
 }
 
 //編輯資料的函式
