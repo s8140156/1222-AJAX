@@ -6,13 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>學生資料管理系統</title>
     <link rel="shortcut icon" href="#" type="image/x-icon">
+    <link rel="stylesheet" href="../plugin/css/bootstrap.css">
     <link rel="stylesheet" href="style.css">
     <!---匯入要使用的函式庫--->
+    <script src="jquery.js"></script>
 
 
 </head>
 <body>
   <h1 class="header">學生資料管理系統</h1>
+
+  <div class="users d-flex flex-wrap mx-auto my-3" style="width:64%">
+    <!-- 設定好放資料的格式 使用class="users" -->
+  </div>
 
   
 </body>
@@ -25,7 +31,8 @@
 * 4.是否會有回傳值？回傳值的功用及處理？
 * 5.是否需要更新畫面內容？更新畫面的方法？
 ************************************/
-
+queryAll();
+// 在畫面一載入完成就執行queryAll();去顯示
 
 //新增資料的函式
 function create(){
@@ -34,10 +41,29 @@ function create(){
 
 //查詢資料的函式
 function queryAll(){
-  $.get("./api/query.php?do=all",(users)=>{
-    //users=JSON.parse(users)
-    console.log(users)
+$.get("./api/query.php?do=all",(users)=>{
+  // render(users)
+  // 方法一：users=JSON.parse(users) 收到php的資料將字串改成json格式
+  // 從php帶過來的資料是字串對瀏覽器來說沒用,所以要改成JSON格式變成陣列形式js才可以吃
+  // 方法二：是改成$.getJSON()
+  // 方法三：從php帶資料來前 先處理成JSON格式header('Content-Type: application/json; charset=utf-8');
+  // 這樣前端就不用在處理一遍
+
+  let user_layout; //宣告版型
+  users.forEach((user,idx)=>{
+    // 把資料庫的陣列取出來
+    user_layout=`<div class='user'>
+                    <div>姓名：${user.name}</div>
+                    <div>生日：${user.birthday}</div>
+                    <div>身分證：${user.uni_id}</div>
+                    <div>學號：${user.school_num}</div>
+                  </div>` //把要放進的資料格式/及帶入的資料寫好
+    $(".users").append(user_layout)
+    //在class="users"的容器裡後面放入user_layout（格式與資料）
+    //在畫面上Network會看到type:xhr 就是使用ajax方式
   })
+  // console.log(users)
+})
 }
 
 //編輯資料的函式
