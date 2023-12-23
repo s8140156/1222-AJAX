@@ -29,6 +29,8 @@
         <a href="Javascript:loadpage('./results/swimming.html')">游泳介紹</a>
         <a href="Javascript:loadpage('./results/msgboard.html')">訪客留言</a>
         <a href="Javascript:loadpage('./results/reference.html')">資料來源</a>
+        <!-- 再來是要執行的javascript:loadpage()這個程式(網頁載入) -->
+        <!-- 去載入./results/底下的xx.html頁面 -->
     </div>
     <div class="content">
     </div>
@@ -42,14 +44,30 @@
 <script>
 
 loadpage("./results/main.html");
+//當頁面一載入時 就執行loadpage這個程式(載入main頁面)
+//其他頁面是用點擊進入 main則是一載入就先進去首頁
 
 
 //建立一個函式loadpage(page)用來載入內容至content區塊中
+// 從指定的網頁路徑（page）獲取內容，然後將該內容插入到具有.content類別的元素中
 function loadpage(page){
   $.get(page,(res)=>{
+    // $.get(page我要拿東西的對象/拿東西的路徑),(res拿到的結果)
+    // 使用jQuery的$.get方法向指定的網頁路徑(page)發送GET請求
+    // res是一個回呼函式()=>{}，它處理當GET請求成功時返回的內容(重點)
     $(".content").html(res);
+    // 把拿到的東西放進.content去, 拿到的東西是個html整個檔案所以把res這個結果放進去
+    // 將從網頁路徑(page)獲取的內容(res)插入到具有.content類別的元素中
+    // .html()方法用於設置元素的HTML內容
   })
 }
+
+//使用ajax 在檢視原始碼時 load進去的內容是不會產生在上面的 只有你原本的程式
+//但在F12_Elements會顯示完整的內容
+// jQuery的$.get方法來從指定的網頁路徑獲取內容，然後將該內容插入到具有.content類別的元素中。
+// 這通常用於動態載入網頁內容，使得在不重新載入整個頁面的情況下，只更新特定部分的內容。
+
+//ajx除了可以串api 還可以串外部資源進來(html/pic/media) 但要注意跨
 
 
 </script>
