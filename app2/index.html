@@ -16,6 +16,10 @@
 <body>
   <h1 class="header">學生資料管理系統</h1>
 
+  <div>
+    <button onclick="query('sex=1')">男生</button>
+  </div>
+
   <div class="users d-flex flex-wrap mx-auto my-3" style="width:64%">
     <!-- 設定好放資料的格式 使用class="users" -->
   </div>
@@ -40,6 +44,18 @@ function create(){
 }
 
 //查詢資料的函式
+//我想下面的程式是在取按下button後選擇sex=1 解析裡面的選項然後帶去資料庫執行
+function query(def){
+  def=def.split("=")
+  console.log(def)
+  $.get("./api/query.php?do=def",{def},(res)=>{
+    console.log(res)
+    //因為ajax沒辦法看到後端php執行(echo)的結果 要回傳資料在前端使用console.log來看
+    //這邊是把上面def送去api是個陣列拆分[0]=>sex, [1]=>1
+
+  })
+}
+
 function queryAll(){
 $.get("./api/query.php?do=all",(users)=>{
   // render(users)
