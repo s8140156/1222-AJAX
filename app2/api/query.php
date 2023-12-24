@@ -17,10 +17,34 @@ switch($_GET['do']){
 		// dd($_GET['value']);
 		//解析GET送過來的有do=def, 還有陣列拆分[0]=>sex, [1]=>1
 	break;
-	case "class":
-		dd($_GET['value']);
-		//解析GET送過來的有do=def, 還有陣列拆分[0]=>sex, [1]=>1
-	break;
+    case 'class':
+		//這邊是聯表操作
+		//先是確認傳進來的班級代碼是什麼去資料庫撈出
+        $stnums=$ClassStudent->all(['class_code'=>$_GET['value']]);
+        // dd($stnums);
+        $nums=[];
+        foreach($stnums as $st){
+            $s=$Student->find(['school_num'=>$st['school_num']]);
+            if(!empty($s)){
+                $nums[]=$s['id'];
+				// 從聯表classstudent對應班級後 製作一個空陣列 除了把$stnums資料拆開後加入,並去找另一張student 以school_num對應連結 去取student的id放進$nums=[]陣列中
+            }
+        }
+        $in=join(',',$nums);
+        $users=$Student->q("select `name`,`uni_id`,`school_num`,`birthday` from `students` where `id` in($in)");
+		//這邊使用sql語法in(特殊指定) 將上述指定的資料插進去
+		//注意這邊是先將陣列轉成字串 然後再把字串插進去sql語法裡
+
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($users);
+    break;
+    case 'classes':
+        $classes=$Class->q("select `code`,`name` from `classes`");
+        header('Content-Type: application/json; charset=utf-8');        
+        echo json_encode($classes);
+		//這邊是在判斷當傳值do=classes時,針對按下哪個班級的button去做對應班級的撈資料
+		// 而button在用變數方式
+    break;
 }
 
 

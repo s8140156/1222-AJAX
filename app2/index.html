@@ -21,8 +21,6 @@
       <button class="btn btn-success mx-2 my-2" onclick="query('sex',2)">女生</button>
     </div>
     <div class="classes mx-2 my-3">
-      <button class="btn btn-info" onclick="query('class',101)">一年一班</button>
-      <button class="btn btn-info" onclick="query('class',102)">一年二班</button>
     </div>
   </div>
 
@@ -43,6 +41,8 @@
 ************************************/
 queryAll();
 // 在畫面一載入完成就執行queryAll();去顯示
+queryClasses();
+// 這邊也是要記得在畫面一載入就要先執行 不然按鍵會不出來
 
 //新增資料的函式
 function create(){
@@ -61,8 +61,23 @@ function query(type,value){
     //這邊是把上面def送去api是個陣列拆分[0]=>sex, [1]=>1
   render(res)
 
+  })
+}
+
+function queryClasses(){
+  $.get("./api/query.php?do=classes",(classes)=>{
+    //console.log(classes)
+    let class_btns;
+    classes.forEach((c,idx)=>{
+      class_btns=`<button class='btn btn-info m-2' onclick="query('class',${c.code})">
+                  ${c.name}
+                  </button>`
+  
+    $(".classes").append(class_btns)
+  })
 
   })
+
 }
 
 function queryAll(){
@@ -84,7 +99,7 @@ function render(datas){
   let user_layout; //宣告版型
   datas.forEach((data,idx)=>{
     // 把資料庫的陣列取出來
-    data_layout=`<div class='p-2'>
+    data_layout=`<div class='p-2' id='user${data.id}'>
       <div class="card" style="width: 18rem;">
      <div class='name text-center bolder fs-3'>${data.name}</div>
     <div class="card-body">
