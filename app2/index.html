@@ -15,9 +15,15 @@
 </head>
 <body>
   <h1 class="header">學生資料管理系統</h1>
-
-  <div>
-    <button onclick="query('sex=1')">男生</button>
+  <div class="container d-flex">
+    <div class="sex mx-2 my-3">
+      <button class="btn btn-primary mx-2 my-2" onclick="query('sex',1)">男生</button>
+      <button class="btn btn-success mx-2 my-2" onclick="query('sex',2)">女生</button>
+    </div>
+    <div class="classes mx-2 my-3">
+      <button class="btn btn-info" onclick="query('class',101)">一年一班</button>
+      <button class="btn btn-info" onclick="query('class',102)">一年二班</button>
+    </div>
   </div>
 
   <div class="users d-flex flex-wrap mx-auto my-3" style="width:64%">
@@ -45,41 +51,59 @@ function create(){
 
 //查詢資料的函式
 //我想下面的程式是在取按下button後選擇sex=1 解析裡面的選項然後帶去資料庫執行
-function query(def){
-  def=def.split("=")
-  console.log(def)
-  $.get("./api/query.php?do=def",{def},(res)=>{
+function query(type,value){
+  // 這個程式在判斷當送去的button值是哪一類型 並送出的資料做拆分解析 帶去資料庫執行(什麼類型資料：跟值)
+  // def=def.split("=")
+  // console.log(def)
+  $.get(`./api/query.php?do=${type}`,{value},(res)=>{
     console.log(res)
     //因為ajax沒辦法看到後端php執行(echo)的結果 要回傳資料在前端使用console.log來看
     //這邊是把上面def送去api是個陣列拆分[0]=>sex, [1]=>1
+  render(res)
+
 
   })
 }
 
 function queryAll(){
 $.get("./api/query.php?do=all",(users)=>{
-  // render(users)
+  render(users)
+  console.log(users)
   // 方法一：users=JSON.parse(users) 收到php的資料將字串改成json格式
   // 從php帶過來的資料是字串對瀏覽器來說沒用,所以要改成JSON格式變成陣列形式js才可以吃
   // 方法二：是改成$.getJSON()
   // 方法三：從php帶資料來前 先處理成JSON格式header('Content-Type: application/json; charset=utf-8');
   // 這樣前端就不用在處理一遍
+})
+}
 
+//把資料的在畫面上呈現及格式獨立成一個function render() 讓任何js變換使用這個程式顯現
+function render(datas){
+  $(".users").html("")
+  // 如果原先.users裡畫面已有資料 後續資料再進來會透過append會再疊加進來,所以要在畫面載入時 先將html內容清空
   let user_layout; //宣告版型
-  users.forEach((user,idx)=>{
+  datas.forEach((data,idx)=>{
     // 把資料庫的陣列取出來
-    user_layout=`<div class='user'>
-                    <div>姓名：${user.name}</div>
-                    <div>生日：${user.birthday}</div>
-                    <div>身分證：${user.uni_id}</div>
-                    <div>學號：${user.school_num}</div>
-                  </div>` //把要放進的資料格式/及帶入的資料寫好
-    $(".users").append(user_layout)
+    data_layout=`<div class='p-2'>
+      <div class="card" style="width: 18rem;">
+     <div class='name text-center bolder fs-3'>${data.name}</div>
+    <div class="card-body">
+      <h5 class="card-title">${data.school_num}</h5>
+      <div class="card-text">${data.birthday}</div>
+      <div class="card-text">${data.uni_id}</div>
+      <div class='controls'>
+        <a href="#" class="btn btn-warning">編輯</a>
+        <a href="#" class="btn btn-danger">刪除</a>
+      </div>
+    </div>
+  </div></div>` //把要放進的資料格式/及帶入的資料寫好
+
+    $(".users").append(data_layout)
     //在class="users"的容器裡後面放入user_layout（格式與資料）
     //在畫面上Network會看到type:xhr 就是使用ajax方式
   })
   // console.log(users)
-})
+
 }
 
 //編輯資料的函式
