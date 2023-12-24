@@ -99,7 +99,10 @@ function render(datas){
   let user_layout; //宣告版型
   datas.forEach((data,idx)=>{
     // 把資料庫的陣列取出來
-    data_layout=`<div class='p-2' id='user${data.id}'>
+    // 在class=card這區 帶上id=id 讓每個card都帶id 則在後台執行完刪除後, 帶回的資料 在前端畫面呈現,被刪除的id就不會帶回
+    // 所以用前端刪除該id相對應的card html而不用重整畫面(就不會有第二次請求)
+    //不用重新提供全部資料 資料量會非常少
+    data_layout=`<div class='p-2' id='user${data.id}'> 
       <div class="card" style="width: 18rem;">
      <div class='name text-center bolder fs-3'>${data.name}</div>
     <div class="card-body">
@@ -108,10 +111,12 @@ function render(datas){
       <div class="card-text">${data.uni_id}</div>
       <div class='controls'>
         <a href="#" class="btn btn-warning">編輯</a>
-        <a href="#" class="btn btn-danger">刪除</a>
+        <a href="Javascript:del(${data.id})" class="btn btn-danger">刪除</a>
       </div>
     </div>
   </div></div>` //把要放進的資料格式/及帶入的資料寫好
+        // 這邊操作del功能 刪除button+Javascript:del()
+
 
     $(".users").append(data_layout)
     //在class="users"的容器裡後面放入user_layout（格式與資料）
@@ -127,7 +132,21 @@ function update(){
 }
 
 //刪除資料的函式
-function del(){
+function del(id){
+  let con=confirm("確定要刪除嗎？")
+  // let con=prompt("確定要刪除嗎？")
+  // 這種會可以打字串進去
+  // alert("確定要刪除嗎？")
+  // 三種警示方式
+  if(con){
+    // 判斷確認是否要刪除
+    $.post('./api/delete.php',{id},(res)=>{
+      // 注意有對應的api/delete.php
+      $(`#user${id}`).remove()
+      // queryAll() //如果使用queryAll()則會多出xhr 100多k資料量
+
+    })
+  }
 
 }
 
