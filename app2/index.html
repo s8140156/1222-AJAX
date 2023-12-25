@@ -1,21 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>學生資料管理系統</title>
-    <link rel="shortcut icon" href="#" type="image/x-icon">
-    <link rel="stylesheet" href="../plugin/css/bootstrap.css">
-    <link rel="stylesheet" href="style.css">
-    <!---匯入要使用的函式庫--->
-    <script src="jquery.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>學生資料管理系統</title>
+  <link rel="shortcut icon" href="#" type="image/x-icon">
+  <link rel="stylesheet" href="../plugin/css/bootstrap.css">
+  <link rel="stylesheet" href="style.css">
+  <!---匯入要使用的函式庫--->
+  <script src="jquery.js"></script>
 
 
 </head>
+
 <body>
   <h1 class="header">學生資料管理系統
-    <button class="btn btn-lg btn-success mx-3" onclick="stuModal.show('#studentForm')">+ 新增 +</button>
+    <!-- <button class="btn btn-lg btn-success mx-3" onclick="stuModal.show('#studentForm')">+ 新增 +</button> -->
+    <button class="btn btn-lg btn-success mx-3" onclick="popForm('add')">+ 新增 +</button>
   </h1>
   <div class="container d-flex">
     <div class="sex mx-2 my-3">
@@ -30,167 +33,122 @@
     <!-- 設定好放資料的格式 使用class="users" -->
   </div>
   <div id="modals">
-    <!-- Modal -->
-<div class="modal fade" id="studentForm" tabindex="-1" aria-labelledby="studentFormLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="studentFormLabel">新增學生</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form action="./api/insert.php" method="post" class="row p-3">
-          <div class="mb-3 col-6">
-            <label for="name" class="form-label">姓名</label>
-            <input type="text" class="form-control" name="name" id="name">
-          </div>
-          <div class="mb-3 col-6">
-            <label for="school_num" class="form-label">學號</label>
-            <input type="text" class="form-control" name="school_num" id="school_num">
-          </div>
-          <div class="mb-3 col-6">
-            <label for="birthday" class="form-label">生日</label>
-            <input type="date" class="form-control" name="birthday" id="birthday">
-          </div>
-          <div class="mb-3 col-6">
-            <label for="uni_id" class="form-label">身分證字號</label>
-            <input type="text" class="form-control" name="uni_id" id="uni_id">
-          </div>
-          <div class="mb-3 col-6">
-            <label for="addr" class="form-label">地址</label>
-            <input type="text" class="form-control" name="addr" id="addr">
-          </div>
-          <div class="mb-3 col-6">
-            <label for="parents" class="form-label">家長</label>
-            <input type="text" class="form-control" name="parents" id="parents">
-          </div>
-          <div class="mb-3 col-6">
-            <label for="tel" class="form-label">電話</label>
-            <input type="text" class="form-control" name="tel" id="tel">
-          </div>
-          <div class="mb-3 col-6">
-            <label for="dept" class="form-label">科系</label>
-            <input type="text" class="form-control" name="dept" id="dept">
-          </div>
-          <!-- <div class="mb-3 col-6">
-            <label for="graduate_at" class="form-label">畢業學校</label>
-            <input type="text" class="form-control" name="graduate_at" id="graduate_at">
-          </div> -->
-          <div class="col-6">
-            <label for="graduate_at" class="form-label">畢業學校</label>
-            <select id="schools" class="form-select" aria-label="Default select example">
-              <!-- <option selected>Open this select menu</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option> -->
-              <!-- 表單格式建立在api/get_schools.php後傳過來 -->
-            </select>
-          </div>
-          <div class="mb-3 col-6">
-            <label for="status_code" class="form-label">狀態</label>
-            <input type="text" class="form-control" name="status_code" id="status_code">
-          </div>
-          <button type="submit" class="btn btn-primary">確認新增</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-          
-        </form>
-      </div>
-      <div class="modal-footer">
-        <!-- 要送出表單的type:submit type:button不能喔 -->
-      </div>
-    </div>
+
   </div>
-</div>
-  </div>
-  
+
   <script src="../plugin/js/bootstrap.js"></script>
 </body>
+
 </html>
 <script>
-/************************************
-* 1.考慮觸發行為的事件
-* 2.建立監聽行為
-* 3.考慮是否需要代入參數
-* 4.是否會有回傳值？回傳值的功用及處理？
-* 5.是否需要更新畫面內容？更新畫面的方法？
-************************************/
-// 宣告Modal
-const stuModal = new bootstrap.Modal('#studentForm', {
-  keyboard: false
-})
+  // 宣告Modal
+  // const stuModal = new bootstrap.Modal('#studentForm', {
+  //   keyboard: false
+  // })
 
-$("#studentForm").on('show.bs.modal',()=>{
-  $.get("./api/get_schools.php",(options)=>{
-    $("#schools").html(options)
-  })
-})
-// on算一種註冊 從bs5找出顯示modal時要做甚麼樣動作'show.bs.modal'=>一開modal即產生下拉選單
+  // $("#studentForm").on('show.bs.modal',()=>{
+  //   $.get("./api/get_schools.php",(options)=>{
+  //     $("#schools").html(options)
+  //   })
+  // })
+  // on算一種註冊 從bs5找出顯示modal時要做甚麼樣動作'show.bs.modal'=>一開modal即產生下拉選單
 
-queryAll();
-// 在畫面一載入完成就執行queryAll();去顯示
-queryClasses();
-// 這邊也是要記得在畫面一載入就要先執行 不然按鍵會不出來
+  let stuModal
+  function popForm(type, id = null) {
+    $.get('./api/user_form.php', (form) => {
+      //先把表單放到#modal裏
+      $("#modals").html(form)
+
+      //宣告modal物件
+      stuModal = new bootstrap.Modal('#studentForm', {
+        keyboard: false
+      })
+
+      //註冊modal的顯示事件
+      $("#studentForm").on('show.bs.modal', () => {
+        $.get("./api/get_schools.php", (options) => {
+          $("#schools").html(options)
+        })
+      })
+      //觸發顯示
+      stuModal.show("studentForm")
+
+    })
+  }
+  
+  /************************************
+  * 1.考慮觸發行為的事件
+  * 2.建立監聽行為
+  * 3.考慮是否需要代入參數
+  * 4.是否會有回傳值？回傳值的功用及處理？
+  * 5.是否需要更新畫面內容？更新畫面的方法？
+  ************************************/
+
+  queryAll();
+  // 在畫面一載入完成就執行queryAll();去顯示
+  queryClasses();
+  // 這邊也是要記得在畫面一載入就要先執行 不然按鍵會不出來
 
 
-//新增資料的函式
-function create(){
+  //新增資料的函式
+  function create() {
 
-}
+  }
 
-//查詢資料的函式
-//我想下面的程式是在取按下button後選擇sex=1 解析裡面的選項然後帶去資料庫執行
-function query(type,value){
-  // 這個程式在判斷當送去的button值是哪一類型 並送出的資料做拆分解析 帶去資料庫執行(什麼類型資料：跟值)
-  // def=def.split("=")
-  // console.log(def)
-  $.get(`./api/query.php?do=${type}`,{value},(res)=>{
-    console.log(res)
-    //因為ajax沒辦法看到後端php執行(echo)的結果 要回傳資料在前端使用console.log來看
-    //這邊是把上面def送去api是個陣列拆分[0]=>sex, [1]=>1
-  render(res)
+  //查詢資料的函式
+  //我想下面的程式是在取按下button後選擇sex=1 解析裡面的選項然後帶去資料庫執行
+  function query(type, value) {
+    // 這個程式在判斷當送去的button值是哪一類型 並送出的資料做拆分解析 帶去資料庫執行(什麼類型資料：跟值)
+    // def=def.split("=")
+    // console.log(def)
+    $.get(`./api/query.php?do=${type}`, { value }, (res) => {
+      console.log(res)
+      //因為ajax沒辦法看到後端php執行(echo)的結果 要回傳資料在前端使用console.log來看
+      //這邊是把上面def送去api是個陣列拆分[0]=>sex, [1]=>1
+      render(res)
 
-  })
-}
+    })
+  }
 
-function queryClasses(){
-  $.get("./api/query.php?do=classes",(classes)=>{
-    //console.log(classes)
-    let class_btns;
-    classes.forEach((c,idx)=>{
-      class_btns=`<button class='btn btn-info m-2' onclick="query('class',${c.code})">
+  function queryClasses() {
+    $.get("./api/query.php?do=classes", (classes) => {
+      //console.log(classes)
+      let class_btns;
+      classes.forEach((c, idx) => {
+        class_btns = `<button class='btn btn-info m-2' onclick="query('class',${c.code})">
                   ${c.name}
                   </button>`
-  
-    $(".classes").append(class_btns)
-  })
 
-  })
+        $(".classes").append(class_btns)
+      })
 
-}
+    })
 
-function queryAll(){
-$.get("./api/query.php?do=all",(users)=>{
-  render(users)
-  console.log(users)
-  // 方法一：users=JSON.parse(users) 收到php的資料將字串改成json格式
-  // 從php帶過來的資料是字串對瀏覽器來說沒用,所以要改成JSON格式變成陣列形式js才可以吃
-  // 方法二：是改成$.getJSON()
-  // 方法三：從php帶資料來前 先處理成JSON格式header('Content-Type: application/json; charset=utf-8');
-  // 這樣前端就不用在處理一遍
-})
-}
+  }
 
-//把資料的在畫面上呈現及格式獨立成一個function render() 讓任何js變換使用這個程式顯現
-function render(datas){
-  $(".users").html("")
-  // 如果原先.users裡畫面已有資料 後續資料再進來會透過append會再疊加進來,所以要在畫面載入時 先將html內容清空
-  let user_layout; //宣告版型
-  datas.forEach((data,idx)=>{
-    // 把資料庫的陣列取出來
-    // 在class=card這區 帶上id=id 讓每個card都帶id 則在後台執行完刪除後, 帶回的資料 在前端畫面呈現,被刪除的id就不會帶回
-    // 所以用前端刪除該id相對應的card html而不用重整畫面(就不會有第二次請求)
-    //不用重新提供全部資料 資料量會非常少
-    data_layout=`<div class='p-2' id='user${data.id}'> 
+  function queryAll() {
+    $.get("./api/query.php?do=all", (users) => {
+      render(users)
+      console.log(users)
+      // 方法一：users=JSON.parse(users) 收到php的資料將字串改成json格式
+      // 從php帶過來的資料是字串對瀏覽器來說沒用,所以要改成JSON格式變成陣列形式js才可以吃
+      // 方法二：是改成$.getJSON()
+      // 方法三：從php帶資料來前 先處理成JSON格式header('Content-Type: application/json; charset=utf-8');
+      // 這樣前端就不用在處理一遍
+    })
+  }
+
+  //把資料的在畫面上呈現及格式獨立成一個function render() 讓任何js變換使用這個程式顯現
+  function render(datas) {
+    $(".users").html("")
+    // 如果原先.users裡畫面已有資料 後續資料再進來會透過append會再疊加進來,所以要在畫面載入時 先將html內容清空
+    let user_layout; //宣告版型
+    datas.forEach((data, idx) => {
+      // 把資料庫的陣列取出來
+      // 在class=card這區 帶上id=id 讓每個card都帶id 則在後台執行完刪除後, 帶回的資料 在前端畫面呈現,被刪除的id就不會帶回
+      // 所以用前端刪除該id相對應的card html而不用重整畫面(就不會有第二次請求)
+      //不用重新提供全部資料 資料量會非常少
+      data_layout = `<div class='p-2' id='user${data.id}'> 
       <div class="card" style="width: 18rem;">
      <div class='name text-center bolder fs-3'>${data.name}</div>
     <div class="card-body">
@@ -203,39 +161,39 @@ function render(datas){
       </div>
     </div>
   </div></div>` //把要放進的資料格式/及帶入的資料寫好
-        // 這邊操作del功能 刪除button+Javascript:del()
+      // 這邊操作del功能 刪除button+Javascript:del()
 
 
-    $(".users").append(data_layout)
-    //在class="users"的容器裡後面放入user_layout（格式與資料）
-    //在畫面上Network會看到type:xhr 就是使用ajax方式
-  })
-  // console.log(users)
-
-}
-
-//編輯資料的函式
-function update(){
-
-}
-
-//刪除資料的函式
-function del(id){
-  let con=confirm("確定要刪除嗎？")
-  // let con=prompt("確定要刪除嗎？")
-  // 這種會可以打字串進去
-  // alert("確定要刪除嗎？")
-  // 三種警示方式
-  if(con){
-    // 判斷確認是否要刪除
-    $.post('./api/delete.php',{id},(res)=>{
-      // 注意有對應的api/delete.php
-      $(`#user${id}`).remove()
-      // queryAll() //如果使用queryAll()則會多出xhr 100多k資料量
-
+      $(".users").append(data_layout)
+      //在class="users"的容器裡後面放入user_layout（格式與資料）
+      //在畫面上Network會看到type:xhr 就是使用ajax方式
     })
+    // console.log(users)
+
   }
 
-}
+  //編輯資料的函式
+  function update() {
+
+  }
+
+  //刪除資料的函式
+  function del(id) {
+    let con = confirm("確定要刪除嗎？")
+    // let con=prompt("確定要刪除嗎？")
+    // 這種會可以打字串進去
+    // alert("確定要刪除嗎？")
+    // 三種警示方式
+    if (con) {
+      // 判斷確認是否要刪除
+      $.post('./api/delete.php', { id }, (res) => {
+        // 注意有對應的api/delete.php
+        $(`#user${id}`).remove()
+        // queryAll() //如果使用queryAll()則會多出xhr 100多k資料量
+
+      })
+    }
+
+  }
 
 </script>
