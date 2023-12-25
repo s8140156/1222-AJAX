@@ -61,6 +61,15 @@
   // })
   // on算一種註冊 從bs5找出顯示modal時要做甚麼樣動作'show.bs.modal'=>一開modal即產生下拉選單
 
+  let input
+$("#search-input").on('input',()=>{
+  input=$("#search-input").val()
+  $.get("./api/search.php",{input},(result)=>{
+    $("#relation").html(result)
+    $("#relation").show()
+  })
+})
+
   let stuModal
   function popForm(type, id = null) {
     switch(type){
@@ -120,10 +129,11 @@
   * 5.是否需要更新畫面內容？更新畫面的方法？
   ************************************/
 
-  queryAll();
+ queryClasses();
+ // 這邊也是要記得在畫面一載入就要先執行 不然按鍵會不出來
+  queryAll('class','101');
   // 在畫面一載入完成就執行queryAll();去顯示
-  queryClasses();
-  // 這邊也是要記得在畫面一載入就要先執行 不然按鍵會不出來
+  //這邊因為程式調整(因為調整班級按鈕顏色) 所以要將function執行調整位置 不然按鈕顏色會被吃掉
 
 
   //新增資料的函式
@@ -143,6 +153,14 @@
       //這邊是把上面def送去api是個陣列拆分[0]=>sex, [1]=>1
       render(res)
 
+      if(type=='class'){
+          $(".class-btn.btn.btn-success").addClass('btn-info')
+          $(".class-btn.btn.btn-success").removeClass('btn-success')
+          $("#b"+value).addClass('btn-success');
+          $("#b"+value).removeClass('btn-info');          
+
+      }
+
     })
   }
 
@@ -151,7 +169,7 @@
       //console.log(classes)
       let class_btns;
       classes.forEach((c, idx) => {
-        class_btns = `<button class='btn btn-info m-2' onclick="query('class',${c.code})">
+        class_btns = `<button class='class-btn btn btn-info m-2' onclick="query('class',${c.code})">
                   ${c.name}
                   </button>`
 
