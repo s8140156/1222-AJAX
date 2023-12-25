@@ -11,6 +11,20 @@
   <link rel="stylesheet" href="style.css">
   <!---匯入要使用的函式庫--->
   <script src="jquery.js"></script>
+  <style>
+    #relation {
+    border: 1px solid #ccc;
+    width: 93.5%;
+    position: relative;
+    left: 74px;
+    top: -1px;
+    display:none;
+}
+
+.btn-warning{
+  background-color: pink!important;
+}
+  </style>
 
 
 </head>
@@ -22,11 +36,11 @@
   </h1>
   <div class="container d-flex">
     <div class="all mx-2 my-3 col-1">
-      <button class="btn btn-success mx-2 my-2" onclick="queryAll()">全部</button>
+      <button class="btn btn-info mx-2 my-2" onclick="queryAll()">全部</button>
     </div>
     <div class="sex mx-2 my-3 col-2">
       <button class="btn btn-primary mx-2 my-2" onclick="query('sex',1)">男生</button>
-      <button class="btn btn-success mx-2 my-2" onclick="query('sex',2)">女生</button>
+      <button class="btn btn-warning mx-2 my-2" onclick="query('sex',2)">女生</button>
     </div>
     <div class="classes mx-2 my-3 col-9">
     </div>
@@ -131,7 +145,7 @@ $("#search-input").on('input',()=>{
 
  queryClasses();
  // 這邊也是要記得在畫面一載入就要先執行 不然按鍵會不出來
-  queryAll('class','101');
+  query('class','101');
   // 在畫面一載入完成就執行queryAll();去顯示
   //這邊因為程式調整(因為調整班級按鈕顏色) 所以要將function執行調整位置 不然按鈕顏色會被吃掉
 
@@ -148,7 +162,7 @@ $("#search-input").on('input',()=>{
     // def=def.split("=")
     // console.log(def)
     $.get(`./api/query.php?do=${type}`, { value }, (res) => {
-      console.log(res)
+      // console.log(res)
       //因為ajax沒辦法看到後端php執行(echo)的結果 要回傳資料在前端使用console.log來看
       //這邊是把上面def送去api是個陣列拆分[0]=>sex, [1]=>1
       render(res)
@@ -169,7 +183,7 @@ $("#search-input").on('input',()=>{
       //console.log(classes)
       let class_btns;
       classes.forEach((c, idx) => {
-        class_btns = `<button class='class-btn btn btn-info m-2' onclick="query('class',${c.code})">
+        class_btns = `<button id="b${c.code}" class='class-btn btn btn-info m-2' onclick="query('class',${c.code})">
                   ${c.name}
                   </button>`
 
@@ -183,7 +197,7 @@ $("#search-input").on('input',()=>{
   function queryAll() {
     $.get("./api/query.php?do=all", (users) => {
       render(users)
-      console.log(users)
+      // console.log(users)
       // 方法一：users=JSON.parse(users) 收到php的資料將字串改成json格式
       // 從php帶過來的資料是字串對瀏覽器來說沒用,所以要改成JSON格式變成陣列形式js才可以吃
       // 方法二：是改成$.getJSON()
@@ -197,7 +211,7 @@ $("#search-input").on('input',()=>{
     console.log(datas)
     $(".users").html("")
     // 如果原先.users裡畫面已有資料 後續資料再進來會透過append會再疊加進來,所以要在畫面載入時 先將html內容清空
-    let user_layout; //宣告版型
+    let data_layout; //宣告版型
     datas.forEach((data, idx) => {
       // 把資料庫的陣列取出來
       // 在class=card這區 帶上id=id 讓每個card都帶id 則在後台執行完刪除後, 帶回的資料 在前端畫面呈現,被刪除的id就不會帶回

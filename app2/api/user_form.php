@@ -57,7 +57,7 @@
           </div> -->
     					<div class="col-6">
     						<label for="schools" class="form-label">畢業學校</label>
-    						<select id="schools" class="form-select" name="graduate_at" aria-label="Default select example">
+    						<select id="schools" class="form-select" name="graduate_at" aria-label="Default select">
     							<!-- <option selected>Open this select menu</option>
               <option value="1">One</option>
               <option value="2">Two</option>
@@ -70,7 +70,7 @@
     						<input type="text" class="form-control" name="status_code" id="status_code" value="<?= $status_code ?? ''; ?>">
     					</div>
 						<?php
-						if(isset($_GET(['id']))){
+						if(isset($_GET['id'])){
 							echo "<input type='hidden' name='id' value='{$user['id']}'>";
 							//這邊還是要理解一下要給誰?
 						}
