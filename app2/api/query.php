@@ -10,7 +10,7 @@ switch($_GET['do']){
 		echo json_encode($Student->all());
 	break;
 	case "sex":
-		$users=$Student->q("select `name`,`uni_id`,`school_num`,`birthday` from  `students` where substr(`uni_id`,2,1)='{$_GET['value']}'");
+		$users=$Student->q("select `id`,`name`,`uni_id`,`school_num`,`birthday` from  `students` where substr(`uni_id`,2,1)='{$_GET['value']}'");
 		//使用直接的sql語法並只撈需求的欄位及條件(視前端如何設定)比原先整個資料撈出來(xhr 113k)資料量會少非常多(xhr 30k(男生) 8k(女生)篩選過後加起來還是比全撈資料量小)
         header('Content-Type: application/json; charset=utf-8');
 		echo json_encode($users);
@@ -31,7 +31,7 @@ switch($_GET['do']){
             }
         }
         $in=join(',',$nums);
-        $users=$Student->q("select `name`,`uni_id`,`school_num`,`birthday` from `students` where `id` in($in)");
+        $users=$Student->q("select `id`,`name`,`uni_id`,`school_num`,`birthday` from `students` where `id` in($in)");
 		//這邊使用sql語法in(特殊指定) 將上述指定的資料插進去
 		//注意這邊是先將陣列轉成字串 然後再把字串插進去sql語法裡
 
