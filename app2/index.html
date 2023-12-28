@@ -33,6 +33,7 @@
   <h1 class="header">學生資料管理系統
     <!-- <button class="btn btn-lg btn-success mx-3" onclick="stuModal.show('#studentForm')">+ 新增 +</button> -->
     <button class="btn btn-lg btn-success mx-3" onclick="popForm('add')">+ 新增 +</button>
+    <!-- 'add'是參數 -->
   </h1>
   <div class="container d-flex">
     <div class="all mx-2 my-3 col-1">
@@ -54,16 +55,18 @@
   <div class="users d-flex flex-wrap mx-auto my-3" style="width:64%">
     <!-- 設定好放資料的格式 使用class="users" -->
   </div>
+  <!-- 下面這塊是顯現modal表單內容 但modal表單獨立在api/user_form.php 使用jq程式及onclick觸發modal顯示 -->
   <div id="modals">
 
   </div>
 
-  <script src="../plugin/js/bootstrap.js"></script>
+  <script src="../plugin/js/bootstrap.bundle.js"></script>
+  <!-- 因為有使用bs modal功能 會使用到boostrap.js功能 要載入 -->
 </body>
 
 </html>
 <script>
-  // 宣告Modal
+  // 宣告Modal from bs doc原本是手動顯示的宣告
   // const stuModal = new bootstrap.Modal('#studentForm', {
   //   keyboard: false
   // })
@@ -84,7 +87,7 @@ $("#search-input").on('input',()=>{
   })
 })
 
-  let stuModal
+  let stuModal //在外面先宣告
   function popForm(type, id = null) {
     switch(type){
       case 'add':
@@ -97,10 +100,14 @@ $("#search-input").on('input',()=>{
             keyboard: false
           })
     
-          //註冊modal的顯示事件
+          //註冊(on())modal的顯示事件
           $("#studentForm").on('show.bs.modal', () => {
+            //我要在#studentForm註冊(on)一個show.bs.modal的事件
+            //bs裡面提到show.bs.modal=>是一開啟modal時 表單事件即導入(show)
             $.get("./api/get_schools.php", (options) => {
+              //我使用$.get從api/get_schools.php拿到options的些選單列表
               $("#schools").html(options)
+              //然後我要在#schools這個容器裡放入options這些選單
             })
           })
           //觸發顯示
